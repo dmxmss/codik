@@ -1,41 +1,30 @@
 package main
 
 import (
+  "codik/handlers"
+  "codik/db"
+  "codik/middleware"
+  "codik/models"
+  "codik/config"
   "log"
-  "fmt"
-  "os"
-  "gorm.io/gorm"
-  "gorm.io/driver/postgres"
+  "github.com/gin-gonic/gin"
 )
 
-type User struct {
-  ID    uint    `gorm:"primaryKey"`
-  Name  string
-  Email string
-}
-
 func main() {
-  dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-    os.Getenv("DB_HOST"),
-    os.Getenv("DB_USER"),
-    os.Getenv("DB_PASSWORD"),
-    os.Getenv("DB_NAME"),
-    os.Getenv("DB_PORT"),
-  )
+  config := config.Default()
 
-  db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+  db, err := db.InitDb(config)
   if err != nil {
     log.Fatal(err)
     return
   }
+  db.AutoMigrate(&models.Course{})
 
-  db.AutoMigrate(&User{})
+  router := gin.Default()  
 
-  db.Create(&User{Name: "John Doe", Email: "john@examle.com"})
-
-  var users []User
-  db.Find(&users)
-  for _, user := range users {
-    fmt.Println(user)
-  }
+  router.LoadHTMLGlob("templates/*")
+  handlers.StaticHandlers(router)
+  router.GET("/courses", middleware.Db(db), handlers.Courses)
+  
+  router.Run(":8000")
 }
