@@ -25,6 +25,7 @@ func main() {
   router.LoadHTMLGlob("templates/*")
   handlers.StaticHandlers(router)
   router.GET("/courses", middleware.Db(db), handlers.Courses)
+  router.GET("/course/:id", middleware.Db(db), handlers.Course)
   
   router.Run(":8000")
 }

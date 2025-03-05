@@ -7,7 +7,9 @@
   <h1>Courses</h1>
   <ul>
     {{ range .Courses }}
-      <li>{{ .Name }}</li>
+      <li>
+        <a href="/course/{{ .ID }}">{{ .Name }}</a>
+      </li>
     {{ end }}
   </ul>
 </body>
