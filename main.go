@@ -1,9 +1,9 @@
 package main
 
 import (
-  "codik/handlers"
+  h "codik/handlers"
+  m "codik/middleware"
   "codik/db"
-  "codik/middleware"
   "codik/models"
   "codik/config"
   "log"
@@ -25,9 +25,10 @@ func main() {
   router := gin.Default()  
 
   router.LoadHTMLGlob("templates/*")
-  handlers.StaticHandlers(router)
-  router.GET("/courses", middleware.Db(db), handlers.Courses)
-  router.GET("/course/:id", middleware.Db(db), handlers.Course)
+  h.StaticHandlers(router)
+  router.GET("/courses", m.Db(db), h.Courses)
+  router.GET("/course/:id", m.Db(db), h.Course)
+  router.GET("/block/:id", m.Db(db), h.Block)
   
   router.Run(":8000")
 }

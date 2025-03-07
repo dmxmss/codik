@@ -2,53 +2,52 @@ package handlers
 
 import (
   "codik/db"
-  u "codik/utils"
   "codik/models"
-  "github.com/gin-gonic/gin"
+  u "codik/utils"
   "gorm.io/gorm"
+  "github.com/gin-gonic/gin"
   e "errors"
   "net/http"
 )
 
-func Course(c *gin.Context) {
+func Block(c *gin.Context) {
   v, exists := c.Get("db")
   db, ok := v.(*db.Db)
 
-  if !ok || !exists {
+  if !exists || !ok {
     u.RenderError(500, "Internal server error", c)
     return
   }
 
   id := c.Param("id")
 
-  var course models.Course
+  var block models.Block 
 
-  result := db.First(&course, id)
+  result := db.First(&block, id)
 
   if e.Is(result.Error, gorm.ErrRecordNotFound) {
-    u.RenderError(404, "Course not found", c)
+    u.RenderError(404, "Block not found", c)
     return
   } else if result.Error != nil {
     u.RenderError(500, "Internal server error", c)
     return
   }
 
-  var blocks []models.Block
-
-  result = db.Where("course_id = ?", course.ID).Find(&blocks)
-  emptyBlocks := false
+  var courseName string
+  result = db.Model(&models.Course{}).Select("name").Where("id = ?", block.CourseID).Take(&courseName)
 
   if e.Is(result.Error, gorm.ErrRecordNotFound) {
-    emptyBlocks = true 
+    u.RenderError(404, "Block not found", c)
+    return
   } else if result.Error != nil {
     u.RenderError(500, "Internal server error", c)
     return
   }
 
   data := gin.H{
-    "Course": course,
-    "Blocks": blocks,
-    "EmptyBlocks": emptyBlocks,
+    "Block": block,
+    "CourseName": courseName,
   }
-  c.HTML(http.StatusOK, "course.html", data)
+
+  c.HTML(http.StatusOK, "block.html", data)
 }
