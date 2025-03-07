@@ -32,8 +32,22 @@ func Course(c *gin.Context) {
     return
   }
 
+  var blocks []models.Block
+
+  result = db.Where("course_id = ?", course.ID).Find(&blocks)
+  emptyBlocks := false
+
+  if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+    emptyBlocks = true 
+  } else if result.Error != nil {
+    u.RenderError(500, "Internal server error", c)
+    return
+  }
+
   data := gin.H{
     "Course": course,
+    "Blocks": blocks,
+    "EmptyBlocks": emptyBlocks,
   }
   c.HTML(http.StatusOK, "course.html", data)
 }

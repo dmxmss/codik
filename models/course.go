@@ -7,6 +7,6 @@ import (
 type Course struct {
   ID        uint `gorm:"primaryKey"`
   CreatedAt time.Time 
-  Name      string
+  Name      string `gorm:"not null"`
   Description string
 } 

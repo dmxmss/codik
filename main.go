@@ -19,6 +19,8 @@ func main() {
     return
   }
   db.AutoMigrate(&models.Course{})
+  db.AutoMigrate(&models.Block{})
+  db.AutoMigrate(&models.Lesson{})
 
   router := gin.Default()  
 

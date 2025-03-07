@@ -7,5 +7,17 @@
   <h1>{{ .Course.Name }}</h1>
   <p>{{ .Course.CreatedAt }}</p>
   <p>{{ .Course.Description }}</p>
+
+  {{ if .EmptyBlocks }}
+    <p>There are not any blocks yet</p>
+  {{ else }}
+    <ul>
+      {{ range .Blocks }}
+        <li>
+          <a href="/block/{{ .ID }}">{{ .Name }}</a>
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
 </body>
 </html>
