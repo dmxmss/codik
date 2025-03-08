@@ -9,15 +9,11 @@
   <p>{{ .Course.Description }}</p>
 
   {{ if .EmptyBlocks }}
-    <p>There are not any blocks yet</p>
+    <h1>There are no blocks yet</h1>
   {{ else }}
-    <ul>
-      {{ range .Blocks }}
-        <li>
-          <a href="/block/{{ .ID }}">{{ .Name }}</a>
-        </li>
-      {{ end }}
-    </ul>
+    {{ range .Blocks }}
+      <a href="/block/{{ .ID }}">{{ .Name }}</a><br>
+    {{ end }}
   {{ end }}
 </body>
 </html>

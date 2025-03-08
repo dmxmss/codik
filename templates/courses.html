@@ -5,12 +5,8 @@
 </head>
 <body>
   <h1>Courses</h1>
-  <ul>
-    {{ range .Courses }}
-      <li>
-        <a href="/course/{{ .ID }}">{{ .Name }}</a>
-      </li>
-    {{ end }}
-  </ul>
+  {{ range .Courses }}
+    <a href="/course/{{ .ID }}">{{ .Name }}</a><br>
+  {{ end }}
 </body>
 </html>

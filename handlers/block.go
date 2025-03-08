@@ -48,12 +48,11 @@ func Block(c *gin.Context) {
   result = db.Model(&models.Lesson{}).Where("block_id = ?", block.ID).Find(&lessons)
   emptyLessons := false
 
-  if e.Is(result.Error, gorm.ErrRecordNotFound) {
-    emptyLessons = true
-    return
-  } else if result.Error != nil {
+  if result.Error != nil {
     u.RenderError(500, "Internal server error", c)
     return
+  } else if len(lessons) == 0 {
+    emptyLessons = true
   }
 
   data := gin.H{
