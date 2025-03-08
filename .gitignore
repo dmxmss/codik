@@ -5,3 +5,6 @@ docker-compose.yaml
 
 # Tokens
 .gittoken
+
+# Notes
+notes.md

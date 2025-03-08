@@ -27,5 +27,5 @@ func Courses(c *gin.Context) {
     "Courses": courses,
   }   
 
-  c.HTML(http.StatusOK, "courses.html", data)
+  c.HTML(http.StatusOK, "index.html", data)
 }
