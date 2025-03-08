@@ -29,6 +29,7 @@ func main() {
   router.GET("/courses", m.Db(db), h.Courses)
   router.GET("/course/:id", m.Db(db), h.Course)
   router.GET("/block/:id", m.Db(db), h.Block)
+  router.GET("/lesson/:id", m.Db(db), h.Lesson)
   
   router.Run(":8000")
 }
